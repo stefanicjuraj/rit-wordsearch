@@ -6,7 +6,7 @@ import Chat from '../components/Chat';
 import { useNavigate } from 'react-router-dom';
 
 export default function WaitingRoom() {
-    const [users, setUsers] = useState<DocumentData[]>([]);
+    const [players, setPlayers] = useState<DocumentData[]>([]);
     const navigate = useNavigate();
     const [countdown, setCountdown] = useState(30);
 
@@ -17,7 +17,7 @@ export default function WaitingRoom() {
         }
 
         const unsubscribe = getUsersInWaitingRoom((newUsers) => {
-            setUsers(newUsers);
+            setPlayers(newUsers);
             if (newUsers.length === 2) {
                 setCountdown(30);
                 const interval = setInterval(() => {
@@ -48,18 +48,22 @@ export default function WaitingRoom() {
                 You entered the waiting room!
             </h1>
             <h1 className="p-2 mb-2 text-xl text-center">
-                Users in the waiting room: {users.length}
+                Players in the waiting room: {players.length}
             </h1>
+            {players.length === 2 &&
+                <p className="text-center">
+                    Game starts in: {countdown} seconds
+                </p>
+            }
             <ul className="text-center">
-                {users.map((user, index) => (
+                {players.map((players, index) => (
                     <li key={index}>
-                        {user.email} - Joined:
-                        {user.joinedAt && new Date(user.joinedAt.seconds * 1000).toDateString()}
+                        <span className="text-green-500">•</span> {players.email}
+                        {/* {user.joinedAt && new Date(user.joinedAt.seconds * 1000).toDateString()} */}
                     </li>
                 ))}
             </ul>
             <Chat />
-            {users.length === 2 && <h2>Game starts in: {countdown} seconds</h2>}
         </div>
     );
 }
