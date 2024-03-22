@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { DocumentData } from 'firebase/firestore';
+// Hooks
 import useGameRoom, { getUsersInGameRoom, joinGameRoom, leaveGameRoom } from "../hooks/useGameRoom";
 import { auth } from '../hooks/auth';
-import { DocumentData } from 'firebase/firestore';
-import { useNavigate } from "react-router-dom";
 
 export default function GameRoom() {
+    const [players, setPlayers] = useState<DocumentData[]>([]);
+    const [timer, setTimer] = useState(30);
+    const navigate = useNavigate();
     const {
         currentSvgIndex,
         inputValue,
@@ -13,9 +17,6 @@ export default function GameRoom() {
         handleSubmit,
         svgData
     } = useGameRoom();
-    const [players, setPlayers] = useState<DocumentData[]>([]);
-    const [timer, setTimer] = useState(30);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const currentUser = auth.currentUser;
@@ -66,7 +67,10 @@ export default function GameRoom() {
                 </form>
                 {alert.show && (
                     <div className={`p-4 mt-4 max-w-sm mx-auto mb-4 text-sm rounded-lg ${alert.type === 'success' ? 'text-green-800 bg-green-50' : 'text-red-800 bg-red-50'}`} role="alert">
-                        <span className="font-medium">{alert.type === 'success' ? 'Success!' : 'Error!'}</span> {alert.message}
+                        <span className="font-medium">
+                            {alert.type === 'success' ? 'Success!' : 'Error!'}
+                        </span>
+                        {alert.message}
                     </div>
                 )}
             </div>

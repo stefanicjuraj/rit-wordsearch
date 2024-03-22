@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { DocumentData } from 'firebase/firestore';
+// Hooks
 import { getUsersInWaitingRoom, joinWaitingRoom, leaveWaitingRoom } from '../hooks/useWaitingRoom';
 import { auth } from '../hooks/auth';
-import { DocumentData } from 'firebase/firestore';
+// Components
 import Chat from '../components/Chat';
-import { useNavigate } from 'react-router-dom';
 
 export default function WaitingRoom() {
     const [players, setPlayers] = useState<DocumentData[]>([]);

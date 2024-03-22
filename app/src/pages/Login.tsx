@@ -1,4 +1,5 @@
 import { useState } from 'react';
+// Hooks
 import { loginUser, signInWithGoogle } from '../hooks/auth';
 
 export default function Login() {

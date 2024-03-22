@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
-import image from "/public/assets/it-wordsearch.svg";
+// Components
 import LogOut from "../components/Logout";
+// Icons
+import image from "/public/assets/it-wordsearch.svg";
 
 export default function Home() {
     return (
