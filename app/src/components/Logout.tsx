@@ -1,3 +1,4 @@
+// Hooks
 import { logoutUser } from "../hooks/auth";
 
 export default function LogOut() {

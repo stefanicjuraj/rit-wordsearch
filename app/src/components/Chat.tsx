@@ -1,4 +1,5 @@
 import { useState } from 'react';
+// Hooks
 import { useMessages, sendMessage } from '../hooks/useChat';
 import { auth } from '../hooks/auth';
 
