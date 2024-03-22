@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// Auth
 import { User, onAuthStateChanged } from "firebase/auth";
 // Service
 import { auth } from "./services/firebase"
 // Components
 import Navbar from "./components/Navbar";
-
 import GameRoom from "./pages/GameRoom";
 // Pages
 import Login from "./pages/Login"
