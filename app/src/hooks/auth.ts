@@ -1,5 +1,4 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
-// Auth
 import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,

@@ -1,5 +1,4 @@
 import { SetStateAction, useState } from "react";
-import { db } from "../services/firebase";
 import {
   DocumentData,
   arrayUnion,
@@ -11,6 +10,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { User } from "firebase/auth";
+// Services
+import { db } from "../services/firebase";
 
 export const joinGameRoom = async (user: User) => {
   const gameRoomRef = doc(db, "collection", "games");

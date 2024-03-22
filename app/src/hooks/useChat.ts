@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   arrayUnion,
   doc,
@@ -5,8 +6,9 @@ import {
   onSnapshot,
   setDoc,
 } from "firebase/firestore";
+// Services
 import { db } from "../services/firebase";
-import { useEffect, useState } from "react";
+// Types
 import { Message } from "../types/message";
 
 export const sendMessage = async (

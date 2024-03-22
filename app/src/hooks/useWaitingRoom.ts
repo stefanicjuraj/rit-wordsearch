@@ -1,3 +1,4 @@
+import { SetStateAction } from "react";
 import { User } from "firebase/auth";
 import {
   DocumentData,
@@ -8,8 +9,8 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+// Services
 import { db } from "../services/firebase";
-import { SetStateAction } from "react";
 
 export const joinWaitingRoom = async (user: User) => {
   const waitingRoomRef = doc(db, "collection", "waiting");
