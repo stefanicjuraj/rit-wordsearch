@@ -4,6 +4,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
   User,
 } from "firebase/auth";
 // Services
@@ -61,6 +62,15 @@ export const addUserToDatabase = async (firebaseUser: User) => {
     await setDoc(usersDocRef, { users }, { merge: true });
   } catch (error) {
     console.error("Error adding user to database: ", error);
+    throw error;
+  }
+};
+
+export const logoutUser = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Error in user logout: ", error);
     throw error;
   }
 };
