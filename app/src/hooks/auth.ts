@@ -1,5 +1,11 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
+// Auth
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  User,
+} from "firebase/auth";
 // Services
 import { auth, db } from "../services/firebase";
 
@@ -11,6 +17,21 @@ export const signInWithGoogle = async () => {
     return userCredential.user;
   } catch (error) {
     console.error("Error in Google sign-in: ", error);
+    throw error;
+  }
+};
+
+export const loginUser = async (email: string, password: string) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    await addUserToDatabase(userCredential.user);
+    return userCredential.user;
+  } catch (error) {
+    console.error("Error in user login: ", error);
     throw error;
   }
 };
