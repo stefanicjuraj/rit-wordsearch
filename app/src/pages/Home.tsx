@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import image from "/public/it-wordsearch.svg";
+import image from "/public/assets/it-wordsearch.svg";
 import LogOut from "../components/Logout";
 
 export default function Home() {
