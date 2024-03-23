@@ -10,6 +10,8 @@ import {
 import { db } from "../services/firebase";
 // Types
 import { Message } from "../types/message";
+// Utils
+import { sanitizeInput } from "../utils/sanitization";
 
 export const sendMessage = async (
   message: unknown,
@@ -19,12 +21,24 @@ export const sendMessage = async (
 ) => {
   const messagesDocRef = doc(db, "collection", "messages");
 
+  const {
+    message: sanitizeMessage,
+    uid: sanitizeUid,
+    email: sanitizedEmail,
+    displayName: sanitizeDisplayName,
+  } = sanitizeInput({
+    message: message as string,
+    uid: uid as string,
+    email,
+    displayName: displayName as string,
+  });
+
   const newMessage = {
-    text: message,
-    uid: uid,
-    userEmail: email,
+    text: sanitizeMessage,
+    uid: sanitizeUid,
+    userEmail: sanitizedEmail,
     timestamp: new Date(),
-    displayName: displayName,
+    displayName: sanitizeDisplayName,
   };
 
   try {
