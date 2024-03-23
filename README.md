@@ -1,5 +1,11 @@
 # RIT WordSearch
 
+<div align="center">
+  <img src="./app/public/assets/rit-wordsearch.png" width="50%" />
+</div>
+
+<br />
+
 RIT WordSearch is a digital puzzle game where players search for IT related terms within a grid of random letters. The words can be placed vertically, horizontally, or diagonally, and in both forward and backward orientations.
 
 The objective is for players to find all hidden words within the shortest time possible.
