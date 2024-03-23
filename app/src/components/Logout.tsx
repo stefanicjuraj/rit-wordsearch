@@ -11,7 +11,7 @@ export default function LogOut() {
     };
 
     return (
-        <button onClick={handleSignOut} className="block mx-auto mt-16 mb-16 px-7 py-3 text-sm font-normal text-center text-white bg-red-400 rounded-full hover:bg-red-500 focus:ring-2 focus:outline-none focus:ring-blue-300 text-md">
+        <button onClick={handleSignOut} className="block mx-auto mt-16 mb-16 px-7 py-3 text-sm font-normal text-center text-white hover:text-black bg-red-500 rounded-full hover:bg-red-500 focus:ring-2 focus:outline-none focus:ring-blue-300 text-md">
             Log Out
         </button>
     );

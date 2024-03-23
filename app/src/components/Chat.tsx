@@ -37,14 +37,14 @@ export default function Chat() {
             </div>
             <hr className="my-4" />
             <div className="py-4">
-                <input className="p-3 text-black rounded-xl w-2/3"
+                <input className="p-3.5 text-black rounded-xl w-2/3 focus:ring-1 focus:ring-green-500 focus:outline-none"
                     type="text"
                     value={currentMessage}
                     onChange={(e) => setCurrentMessage(e.target.value)}
                     maxLength={50}
                     placeholder="Type a message"
                 />
-                <button className="ml-2 px-5 py-3 text-black bg-white rounded-xl" onClick={handleSend}>Send</button>
+                <button className="ml-2 px-4 py-3.5 text-white hover:text-black bg-green-500 hover:bg-green-500 rounded-xl" onClick={handleSend}>Send</button>
             </div>
         </div>
     );
