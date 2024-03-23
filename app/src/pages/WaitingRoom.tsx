@@ -65,10 +65,10 @@ useEffect(() => {
 
     return (
         <div className="mx-auto mt-32 text-white">
-            <h1 className="mb-8 text-2xl text-center">
+            <h1 className="mb-8 text-xl text-center">
                 You entered the waiting room!
             </h1>
-            <h1 className="p-2 mb-2 text-lg text-center">
+            <h1 className="p-2 mb-2 text-xl text-center">
                 Players in the waiting room: {players.length}
             </h1>
             {players.length === 2 &&
@@ -76,7 +76,7 @@ useEffect(() => {
                     Game starts in: {countdown} seconds
                 </p>
             }
-            <ul className="text-center">
+            <ul className="text-center text-sm">
                 {players.map((players, index) => (
                     <li key={index}>
                         <span className="text-green-500">•</span> {players.email}

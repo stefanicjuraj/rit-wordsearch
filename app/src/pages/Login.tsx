@@ -30,7 +30,7 @@ export default function Login() {
             </div>
             <button
                 type="button"
-                className="text-white bg-green-500 hover:bg-green-700 focus:ring-2 focus:outline-none focus:ring-green-500 font-normal rounded-full text-sm w-full sm:w-auto px-7 py-3"
+                className="text-white bg-green-500 hover:bg-green-500 hover:text-black focus:ring-1 focus:outline-none focus:ring-green-500 font-normal rounded-full text-sm w-full sm:w-auto px-7 py-3"
                 onClick={loginGoogle}>
                 Login with Google
             </button>
