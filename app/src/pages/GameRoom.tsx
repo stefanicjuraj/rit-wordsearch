@@ -6,7 +6,7 @@ import useGameRoom, { getUsersInGameRoom, joinGameRoom, leaveGameRoom } from "..
 import { auth } from '../hooks/auth';
 
 export default function GameRoom() {
-    const [players, setPlayers] = useState<DocumentData[]>([]);
+    const [users, setUsers] = useState<DocumentData[]>([]);
     const [timer, setTimer] = useState(30);
     const navigate = useNavigate();
     const {
@@ -25,7 +25,7 @@ export default function GameRoom() {
         }
 
         const unsubscribe = getUsersInGameRoom((newUsers) => {
-            setPlayers(newUsers);
+            setUsers(newUsers);
         });
 
         const countdown = setInterval(() => {
@@ -49,7 +49,7 @@ export default function GameRoom() {
 
     return (
         <div>
-            <h1 className="mt-20 text-white text-center">Game Room {players.length} </h1>
+            <h1 className="mt-20 text-white text-center mb-4">Players: {users.length} </h1>
             <div className="timer text-white text-center">
                 Time left: {timer} seconds
             </div>
