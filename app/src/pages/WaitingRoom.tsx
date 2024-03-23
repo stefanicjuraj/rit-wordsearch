@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DocumentData } from 'firebase/firestore';
 // Hooks
@@ -12,37 +12,56 @@ export default function WaitingRoom() {
     const navigate = useNavigate();
     const [countdown, setCountdown] = useState(30);
 
-    useEffect(() => {
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-            joinWaitingRoom(currentUser);
-        }
+const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-        const unsubscribe = getUsersInWaitingRoom((newUsers) => {
-            setPlayers(newUsers);
-            if (newUsers.length === 2) {
-                setCountdown(30);
-                const interval = setInterval(() => {
-                    setCountdown((currentCount) => {
-                        if (currentCount <= 1) {
-                            clearInterval(interval);
-                            navigate('/game-room');
-                            return currentCount;
+useEffect(() => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        joinWaitingRoom(currentUser);
+    }
+
+    const unsubscribe = getUsersInWaitingRoom((newUsers) => {
+        setPlayers(newUsers);
+
+        if (newUsers.length === 2) {
+            if (intervalRef.current !== null) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+            setCountdown(30);
+            intervalRef.current = setInterval(() => {
+                setCountdown((currentCount) => {
+                    if (currentCount <= 1) {
+                        if (intervalRef.current) {
+                            clearInterval(intervalRef.current);
+                            intervalRef.current = null;
                         }
-                        return currentCount - 1;
-                    });
-                }, 1000);
-                return () => clearInterval(interval);
+                        navigate('/game-room');
+                        return currentCount;
+                    }
+                    return currentCount - 1;
+                });
+            }, 1000);
+        } else if (newUsers.length < 2) {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
             }
-        });
+            setCountdown(30);
+        }
+    });
 
-        return () => {
-            if (currentUser) {
-                leaveWaitingRoom(currentUser.uid);
-            }
-            unsubscribe();
-        };
-    }, [navigate]);
+    return () => {
+        if (currentUser) {
+            leaveWaitingRoom(currentUser.uid);
+        }
+        unsubscribe();
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+    };
+}, [navigate]);
 
     return (
         <div className="mx-auto mt-32 text-white">
