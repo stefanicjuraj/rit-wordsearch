@@ -1,7 +1,7 @@
 # RIT WordSearch
 
 <div align="center">
-  <img src="./app/public/assets/rit-wordsearch.png" width="50%" />
+  <img src="./app/public/assets/rit-wordsearch.png" width="75%" />
 </div>
 
 <br />
