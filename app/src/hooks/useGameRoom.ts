@@ -11,6 +11,8 @@ import {
 import { User } from "firebase/auth";
 // Services
 import { db } from "../services/firebase";
+// Utils
+import { sanitizeString } from "../utils/sanitization";
 
 export const joinGameRoom = async (user: User) => {
   const gameRoomRef = doc(db, "collection", "games");
@@ -82,16 +84,17 @@ export default function useGameRoom(initialSvgIndex = 0) {
     { src: "program.svg", correctAnswer: "program" },
   ];
 
-  const handleInputChange = (event: {
-    target: { value: SetStateAction<string> };
-  }) => {
+  const handleInputChange = (event: { target: { value: string } }) => {
     setInputValue(event.target.value);
   };
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
+
+    const sanitizedInputValue = sanitizeString(inputValue).toLowerCase();
+
     if (
-      inputValue.toLowerCase() ===
+      sanitizedInputValue ===
       svgData[currentSvgIndex].correctAnswer.toLowerCase()
     ) {
       const nextIndex = (currentSvgIndex + 1) % svgData.length;
