@@ -5,7 +5,6 @@ import {
   doc,
   getDoc,
   onSnapshot,
-  runTransaction,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -17,28 +16,24 @@ export const joinGameRoom = async (user: User) => {
   const gameRoomRef = doc(db, "collection", "games");
   const snapshot = await getDoc(gameRoomRef);
   if (snapshot.exists()) {
-    const players = snapshot.data().players || [];
-    const playerExists = players.some(
-      (existingPlayer: { uid: unknown }) => existingPlayer.uid === user.uid
+    const users = snapshot.data().users || [];
+    const userExists = users.some(
+      (existingUser: { uid: unknown }) => existingUser.uid === user.uid
     );
-    if (!playerExists) {
+    if (!userExists) {
       await updateDoc(gameRoomRef, {
-        players: arrayUnion({
-          gameId: new Date(),
+        users: arrayUnion({
           uid: user.uid,
           email: user.email,
-          joinedAt: new Date(),
         }),
       });
     }
   } else {
     await setDoc(gameRoomRef, {
-      players: [
+      users: [
         {
-          gameId: new Date(),
           uid: user.uid,
           email: user.email,
-          joinedAt: new Date(),
         },
       ],
     });
@@ -47,22 +42,15 @@ export const joinGameRoom = async (user: User) => {
 
 export const leaveGameRoom = async (uid: string) => {
   const gameRoomRef = doc(db, "collection", "games");
-
-  try {
-    await runTransaction(db, async (transaction) => {
-      const gameRoomDoc = await transaction.get(gameRoomRef);
-      if (!gameRoomDoc.exists()) {
-        throw "Document does not exist!";
-      }
-      const gameRoomData = gameRoomDoc.data();
-      const updatedPlayers = gameRoomData.players.filter(
-        (player: { uid: string }) => player.uid !== uid
+  const snapshot = await getDoc(gameRoomRef);
+  if (snapshot.exists()) {
+    const gameRoomData = snapshot.data();
+    if (gameRoomData.users) {
+      const updatedUsers = gameRoomData.users.filter(
+        (user: { uid: string }) => user.uid !== uid
       );
-
-      transaction.update(gameRoomRef, { players: updatedPlayers });
-    });
-  } catch (e) {
-    console.log("Transaction failed: ", e);
+      await updateDoc(gameRoomRef, { users: updatedUsers });
+    }
   }
 };
 
@@ -70,12 +58,12 @@ export const getUsersInGameRoom = (setUsers: {
   (value: SetStateAction<DocumentData[]>): void;
   (arg0: never[]): void;
 }) => {
-  const gameRoomRef = doc(db, "collection", "games");
+  const waitingRoomRef = doc(db, "collection", "games");
 
-  return onSnapshot(gameRoomRef, (doc) => {
+  return onSnapshot(waitingRoomRef, (doc) => {
     if (doc.exists()) {
       const data = doc.data();
-      setUsers(data.players || []);
+      setUsers(data.users || []);
     } else {
       setUsers([]);
     }
