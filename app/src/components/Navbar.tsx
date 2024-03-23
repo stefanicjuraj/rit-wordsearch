@@ -4,7 +4,7 @@ export default function Navbar() {
             <nav className="bg-[#111] text-white fixed w-full z-20 top-0 start-0 py-2">
                 <div className="flex flex-wrap items-center justify-between p-5 mx-auto max-w-screen-xl">
                     <a className="flex items-center space-x-3 rtl:space-x-reverse">
-                        <span className="self-center text-3xl font-black whitespace-nowrap">
+                        <span className="self-center text-2xl font-black whitespace-nowrap">
                             IT WordSearch
                         </span>
                     </a>
