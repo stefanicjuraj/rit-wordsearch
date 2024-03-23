@@ -46,10 +46,10 @@ export default function WaitingRoom() {
 
     return (
         <div className="mx-auto mt-32 text-white">
-            <h1 className="mb-8 text-3xl text-center">
+            <h1 className="mb-8 text-2xl text-center">
                 You entered the waiting room!
             </h1>
-            <h1 className="p-2 mb-2 text-xl text-center">
+            <h1 className="p-2 mb-2 text-lg text-center">
                 Players in the waiting room: {players.length}
             </h1>
             {players.length === 2 &&
