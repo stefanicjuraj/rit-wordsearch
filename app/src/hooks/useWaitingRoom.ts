@@ -50,9 +50,20 @@ export const leaveWaitingRoom = async (uid: string) => {
     const updatedUsers = waitingRoomData.users.filter(
       (user: { uid: string }) => user.uid !== uid
     );
+
     await updateDoc(waitingRoomRef, { users: updatedUsers });
+
+    if (updatedUsers.length === 0) {
+      clearChatMessages();
+    }
   }
 };
+
+const clearChatMessages = async () => {
+  const messagesDocRef = doc(db, "collection", "messages");
+  await setDoc(messagesDocRef, { messages: [] });
+};
+
 
 export const getUsersInWaitingRoom = (setUsers: {
   (value: SetStateAction<DocumentData[]>): void;
