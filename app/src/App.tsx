@@ -5,11 +5,11 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import { auth } from "./services/firebase"
 // Components
 import Navbar from "./components/Navbar";
-import GameRoom from "./pages/GameRoom";
+import Game from "./pages/Game";
 // Pages
 import Login from "./pages/Login"
 import Home from "./pages/Home";
-import WaitingRoom from "./pages/WaitingRoom";
+import Waiting from "./pages/Waiting";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -35,8 +35,8 @@ export default function App() {
             <p> Welcome, {currentUser.email}</p>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/waiting-room" element={<WaitingRoom />} />
-              <Route path="/game-room" element={<GameRoom />} />
+              <Route path="/waiting" element={<Waiting />} />
+              <Route path="/game" element={<Game />} />
             </Routes>
           </>
         ) : (
