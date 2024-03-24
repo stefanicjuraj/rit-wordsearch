@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DocumentData, doc, setDoc } from 'firebase/firestore';
+import { DocumentData, doc, getDoc, setDoc } from 'firebase/firestore';
 // Hooks
 import useGameRoom, { getUsersInGame, joinGame, leaveGame } from "../hooks/useGame";
 import { auth } from '../hooks/auth';
@@ -48,21 +48,58 @@ export default function Game() {
             const currentUser = auth.currentUser;
             if (currentUser) {
                 const scoreRef = doc(db, "collection", "scores");
-                const userScore = `${currentUser.uid}`;
-                setDoc(scoreRef, {
-                    [userScore]: {
-                        displayName: currentUser.displayName,
-                        email: currentUser.email,
-                        score: score,
+
+                getDoc(scoreRef).then((docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        const userScores = data[currentUser.uid] || {};
+                        let highestScore = userScores.highestScore || 0;
+
+                        if (score > highestScore) {
+                            highestScore = score;
+                        }
+
+                        const updatedScores = {
+                            ...data,
+                            [currentUser.uid]: {
+                                displayName: currentUser.displayName,
+                                email: currentUser.email,
+                                score: score,
+                                highestScore: highestScore
+                            }
+                        };
+
+                        setDoc(scoreRef, updatedScores, { merge: true })
+                            .then(() => {
+                                navigate('/');
+                            })
+                            .catch(error => {
+                                console.error("Error saving score: ", error);
+                                navigate('/');
+                            });
+                    } else {
+                        const initialScores = {
+                            [currentUser.uid]: {
+                                displayName: currentUser.displayName,
+                                email: currentUser.email,
+                                score: score,
+                                highestScore: score
+                            }
+                        };
+
+                        setDoc(scoreRef, initialScores, { merge: true })
+                            .then(() => {
+                                navigate('/');
+                            })
+                            .catch(error => {
+                                console.error("Error creating scores document: ", error);
+                                navigate('/');
+                            });
                     }
-                }, { merge: true })
-                    .then(() => {
-                        navigate('/');
-                    })
-                    .catch(error => {
-                        console.error("Error saving score: ", error);
-                        navigate('/');
-                    });
+                }).catch(error => {
+                    console.error("Error fetching scores document: ", error);
+                    navigate('/');
+                });
             } else {
                 navigate('/');
             }
