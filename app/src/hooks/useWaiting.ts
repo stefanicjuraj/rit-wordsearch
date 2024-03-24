@@ -12,7 +12,7 @@ import {
 // Services
 import { db } from "../services/firebase";
 
-export const joinWaitingRoom = async (user: User) => {
+export const joinWaiting = async (user: User) => {
   const waitingRoomRef = doc(db, "collection", "waiting");
   const snapshot = await getDoc(waitingRoomRef);
   if (snapshot.exists()) {
@@ -42,7 +42,7 @@ export const joinWaitingRoom = async (user: User) => {
   }
 };
 
-export const leaveWaitingRoom = async (uid: string) => {
+export const leaveWaiting = async (uid: string) => {
   const waitingRoomRef = doc(db, "collection", "waiting");
   const snapshot = await getDoc(waitingRoomRef);
   if (snapshot.exists() && snapshot.data().users) {
@@ -64,8 +64,7 @@ const clearChatMessages = async () => {
   await setDoc(messagesDocRef, { messages: [] });
 };
 
-
-export const getUsersInWaitingRoom = (setUsers: {
+export const getUsersinWaiting = (setUsers: {
   (value: SetStateAction<DocumentData[]>): void;
   (arg0: never[]): void;
 }) => {

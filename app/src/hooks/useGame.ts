@@ -14,7 +14,7 @@ import { db } from "../services/firebase";
 // Utils
 import { sanitizeString } from "../utils/sanitization";
 
-export const joinGameRoom = async (user: User) => {
+export const joinGame = async (user: User) => {
   const gameRoomRef = doc(db, "collection", "games");
   const snapshot = await getDoc(gameRoomRef);
   if (snapshot.exists()) {
@@ -42,7 +42,7 @@ export const joinGameRoom = async (user: User) => {
   }
 };
 
-export const leaveGameRoom = async (uid: string) => {
+export const leaveGame = async (uid: string) => {
   const gameRoomRef = doc(db, "collection", "games");
   const snapshot = await getDoc(gameRoomRef);
   if (snapshot.exists()) {
@@ -56,7 +56,7 @@ export const leaveGameRoom = async (uid: string) => {
   }
 };
 
-export const getUsersInGameRoom = (setUsers: {
+export const getUsersInGame = (setUsers: {
   (value: SetStateAction<DocumentData[]>): void;
   (arg0: never[]): void;
 }) => {
@@ -72,7 +72,7 @@ export const getUsersInGameRoom = (setUsers: {
   });
 };
 
-export default function useGameRoom(initialSvgIndex = 0) {
+export default function useGame(initialSvgIndex = 0) {
   const [currentSvgIndex, setCurrentSvgIndex] = useState(initialSvgIndex);
   const [inputValue, setInputValue] = useState("");
   const [alert, setAlert] = useState({ show: false, message: "", type: "" });
