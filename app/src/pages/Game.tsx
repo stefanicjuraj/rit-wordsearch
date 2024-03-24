@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DocumentData, doc, setDoc } from 'firebase/firestore';
 // Hooks
-import useGameRoom, { getUsersInGameRoom, joinGameRoom, leaveGameRoom } from "../hooks/useGameRoom";
+import useGameRoom, { getUsersInGame, joinGame, leaveGame } from "../hooks/useGame";
 import { auth } from '../hooks/auth';
 import { db } from "../services/firebase";
 
@@ -23,10 +23,10 @@ export default function Game() {
     useEffect(() => {
         const currentUser = auth.currentUser;
         if (currentUser) {
-            joinGameRoom(currentUser);
+            joinGame(currentUser);
         }
 
-        const unsubscribe = getUsersInGameRoom((newUsers) => {
+        const unsubscribe = getUsersInGame((newUsers) => {
             setUsers(newUsers);
         });
 
@@ -36,7 +36,7 @@ export default function Game() {
 
         return () => {
             if (currentUser) {
-                leaveGameRoom(currentUser.uid);
+                leaveGame(currentUser.uid);
             }
             unsubscribe();
             clearInterval(countdown);

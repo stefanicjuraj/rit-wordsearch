@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DocumentData } from 'firebase/firestore';
 // Hooks
-import { getUsersInWaitingRoom, joinWaitingRoom, leaveWaitingRoom } from '../hooks/useWaitingRoom';
+import { getUsersinWaiting, joinWaiting, leaveWaiting } from '../hooks/useWaiting';
 import { auth } from '../hooks/auth';
 // Components
 import Chat from '../components/Chat';
@@ -12,56 +12,56 @@ export default function Waiting() {
     const navigate = useNavigate();
     const [countdown, setCountdown] = useState(30);
 
-const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-useEffect(() => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-        joinWaitingRoom(currentUser);
-    }
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+            joinWaiting(currentUser);
+        }
 
-    const unsubscribe = getUsersInWaitingRoom((newUsers) => {
-        setPlayers(newUsers);
+        const unsubscribe = getUsersinWaiting((newUsers) => {
+            setPlayers(newUsers);
 
-        if (newUsers.length === 2) {
-            if (intervalRef.current !== null) {
-                clearInterval(intervalRef.current);
-                intervalRef.current = null;
-            }
-            setCountdown(30);
-            intervalRef.current = setInterval(() => {
-                setCountdown((currentCount) => {
-                    if (currentCount <= 1) {
-                        if (intervalRef.current) {
-                            clearInterval(intervalRef.current);
-                            intervalRef.current = null;
+            if (newUsers.length === 2) {
+                if (intervalRef.current !== null) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
+                setCountdown(30);
+                intervalRef.current = setInterval(() => {
+                    setCountdown((currentCount) => {
+                        if (currentCount <= 1) {
+                            if (intervalRef.current) {
+                                clearInterval(intervalRef.current);
+                                intervalRef.current = null;
+                            }
+                            navigate('/game-room');
+                            return currentCount;
                         }
-                        navigate('/game-room');
-                        return currentCount;
-                    }
-                    return currentCount - 1;
-                });
-            }, 1000);
-        } else if (newUsers.length < 2) {
+                        return currentCount - 1;
+                    });
+                }, 1000);
+            } else if (newUsers.length < 2) {
+                if (intervalRef.current) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
+                setCountdown(30);
+            }
+        });
+
+        return () => {
+            if (currentUser) {
+                leaveWaiting(currentUser.uid);
+            }
+            unsubscribe();
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
                 intervalRef.current = null;
             }
-            setCountdown(30);
-        }
-    });
-
-    return () => {
-        if (currentUser) {
-            leaveWaitingRoom(currentUser.uid);
-        }
-        unsubscribe();
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
-    };
-}, [navigate]);
+        };
+    }, [navigate]);
 
     return (
         <div className="mx-auto mt-32 text-white">
