@@ -6,7 +6,7 @@ import useGameRoom, { getUsersInGameRoom, joinGameRoom, leaveGameRoom } from "..
 import { auth } from '../hooks/auth';
 import { db } from "../services/firebase";
 
-export default function GameRoom() {
+export default function Game() {
     const [users, setUsers] = useState<DocumentData[]>([]);
     const [timer, setTimer] = useState(30);
     const navigate = useNavigate();

@@ -7,7 +7,7 @@ import { auth } from '../hooks/auth';
 // Components
 import Chat from '../components/Chat';
 
-export default function WaitingRoom() {
+export default function Waiting() {
     const [players, setPlayers] = useState<DocumentData[]>([]);
     const navigate = useNavigate();
     const [countdown, setCountdown] = useState(30);
