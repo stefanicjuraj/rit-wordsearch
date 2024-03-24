@@ -77,6 +77,7 @@ export default function useGameRoom(initialSvgIndex = 0) {
   const [inputValue, setInputValue] = useState("");
   const [alert, setAlert] = useState({ show: false, message: "", type: "" });
   const [currentPlayer, setCurrentPlayer] = useState(1);
+  const [score, setScore] = useState(0);
 
   const svgData = [
     { src: "class.svg", correctAnswer: "class" },
@@ -99,6 +100,8 @@ export default function useGameRoom(initialSvgIndex = 0) {
     ) {
       const nextIndex = (currentSvgIndex + 1) % svgData.length;
       setCurrentSvgIndex(nextIndex);
+
+      setScore((prevScore) => prevScore + 1);
 
       setAlert({
         show: true,
@@ -125,5 +128,6 @@ export default function useGameRoom(initialSvgIndex = 0) {
     svgData,
     currentPlayer,
     setCurrentPlayer,
+    score,
   };
 }
