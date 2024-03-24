@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DocumentData } from 'firebase/firestore';
+import { DocumentData, doc, setDoc } from 'firebase/firestore';
 // Hooks
 import useGameRoom, { getUsersInGameRoom, joinGameRoom, leaveGameRoom } from "../hooks/useGameRoom";
 import { auth } from '../hooks/auth';
+import { db } from "../services/firebase";
 
 export default function GameRoom() {
     const [users, setUsers] = useState<DocumentData[]>([]);
@@ -15,7 +16,8 @@ export default function GameRoom() {
         alert,
         handleInputChange,
         handleSubmit,
-        svgData
+        svgData,
+        score
     } = useGameRoom();
 
     useEffect(() => {
@@ -43,9 +45,26 @@ export default function GameRoom() {
 
     useEffect(() => {
         if (timer === 0) {
-            navigate('/');
+            const currentUser = auth.currentUser;
+            if (currentUser) {
+                const scoreRef = doc(db, "collection", "scores");
+                setDoc(scoreRef, {
+                    email: currentUser.email,
+                    displayName: currentUser.displayName,
+                    score: score,
+                }, { merge: true })
+                    .then(() => {
+                        navigate('/');
+                    })
+                    .catch(error => {
+                        console.error("Error saving score: ", error);
+                        navigate('/');
+                    });
+            } else {
+                navigate('/');
+            }
         }
-    }, [timer, navigate]);
+    }, [timer, navigate, score]);
 
     return (
         <div>
