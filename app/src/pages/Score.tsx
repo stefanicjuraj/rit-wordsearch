@@ -4,6 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from "../services/firebase";
 // Types
 import { UserScore } from '../types/score';
+import { Link } from 'react-router-dom';
 
 export default function Score() {
     const [scores, setScores] = useState<UserScore[]>([]);
@@ -64,6 +65,11 @@ export default function Score() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+            <div className="mt-12 text-center mb-32">
+                <Link to="/" className="px-7 py-4 text-sm font-medium text-white bg-red-500 border border-red-500 rounded-full focus:outline-none hover:bg-red-500 focus:ring-1 focus:ring-red-500 hover:text-black me-2">
+                    Exit Scoreboard
+                </Link>
             </div>
         </>
     );
