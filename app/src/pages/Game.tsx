@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DocumentData, doc, getDoc, setDoc } from 'firebase/firestore';
 // Hooks
 import useGameRoom, { getUsersInGame, joinGame, leaveGame } from "../hooks/useGame";
@@ -132,6 +132,11 @@ export default function Game() {
                         {alert.message}
                     </div>
                 )}
+            </div>
+            <div className="mt-12 text-center mb-32">
+                <Link to="/" className="px-7 py-4 text-sm font-medium text-white bg-red-500 border border-red-500 rounded-full focus:outline-none hover:bg-red-500 focus:ring-1 focus:ring-red-500 hover:text-black me-2">
+                    Exit Game
+                </Link>
             </div>
         </div>
     );

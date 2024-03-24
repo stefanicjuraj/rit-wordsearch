@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { DocumentData } from 'firebase/firestore';
 // Hooks
 import { getUsersinWaiting, joinWaiting, leaveWaiting } from '../hooks/useWaiting';
@@ -85,6 +85,11 @@ export default function Waiting() {
                 ))}
             </ul>
             <Chat />
+            <div className="text-center mb-32">
+                <Link to="/" className="px-7 py-4 text-sm font-medium text-white bg-red-500 border border-red-500 rounded-full focus:outline-none hover:bg-red-500 focus:ring-1 focus:ring-red-500 hover:text-black me-2">
+                    Exit Waiting Room
+                </Link>
+            </div>
         </div>
     );
 }
