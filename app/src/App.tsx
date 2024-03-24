@@ -10,6 +10,7 @@ import Game from "./pages/Game";
 import Login from "./pages/Login"
 import Home from "./pages/Home";
 import Waiting from "./pages/Waiting";
+import Score from "./pages/Score";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -37,6 +38,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/waiting" element={<Waiting />} />
               <Route path="/game" element={<Game />} />
+              <Route path="/score" element={<Score />} />
             </Routes>
           </>
         ) : (
