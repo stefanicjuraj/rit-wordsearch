@@ -66,6 +66,11 @@ export default function Score() {
                     </tbody>
                 </table>
             </div>
+            <div className="mt-12 text-center mb-12">
+                <Link to="/latest" className="px-7 py-4 text-sm font-medium text-white bg-yellow-500 border border-yellow-500 rounded-full focus:outline-none hover:bg-yellow-500 focus:ring-1 focus:ring-yellow-500 hover:text-black me-2">
+                    View Latest Scores
+                </Link>
+            </div>
             <div className="mt-12 text-center mb-32">
                 <Link to="/" className="px-7 py-4 text-sm font-medium text-white bg-red-500 border border-red-500 rounded-full focus:outline-none hover:bg-red-500 focus:ring-1 focus:ring-red-500 hover:text-black me-2">
                     Exit Scoreboard
