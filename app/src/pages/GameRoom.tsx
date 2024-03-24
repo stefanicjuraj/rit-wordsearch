@@ -48,10 +48,13 @@ export default function GameRoom() {
             const currentUser = auth.currentUser;
             if (currentUser) {
                 const scoreRef = doc(db, "collection", "scores");
+                const userScore = `${currentUser.uid}`;
                 setDoc(scoreRef, {
-                    email: currentUser.email,
-                    displayName: currentUser.displayName,
-                    score: score,
+                    [userScore]: {
+                        displayName: currentUser.displayName,
+                        email: currentUser.email,
+                        score: score,
+                    }
                 }, { merge: true })
                     .then(() => {
                         navigate('/');
