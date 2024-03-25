@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 // Components
 import LogOut from "../components/Logout";
 // Icons
-import image from "/public/assets/it-wordsearch.svg";
+import image from "/assets/it-wordsearch.svg";
 
 export default function Home() {
     return (

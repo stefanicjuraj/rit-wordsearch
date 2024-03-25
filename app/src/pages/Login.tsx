@@ -1,7 +1,7 @@
 // Hooks
 import { signInWithGoogle } from '../hooks/auth';
 // Icons
-import image from "/public/assets/it-wordsearch.svg";
+import image from "/assets/it-wordsearch.svg";
 
 export default function Login() {
 
