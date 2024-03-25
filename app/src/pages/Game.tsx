@@ -71,11 +71,13 @@ export default function Game() {
 
                         setDoc(scoreRef, updatedScores, { merge: true })
                             .then(() => {
-                                navigate('/');
+                                window.alert(`Your score is ${score}.`);
+                                navigate('/latest');
                             })
                             .catch(error => {
                                 console.error("Error saving score: ", error);
-                                navigate('/');
+                                window.alert(`Your score is ${score}.`);
+                                navigate('/latest');
                             });
                     } else {
                         const initialScores = {
@@ -89,19 +91,23 @@ export default function Game() {
 
                         setDoc(scoreRef, initialScores, { merge: true })
                             .then(() => {
-                                navigate('/');
+                                window.alert(`Your score is ${score}.`);
+                                navigate('/latest');
                             })
                             .catch(error => {
                                 console.error("Error creating scores document: ", error);
-                                navigate('/');
+                                window.alert(`Your score is ${score}.`);
+                                navigate('/latest');
                             });
                     }
                 }).catch(error => {
                     console.error("Error fetching scores document: ", error);
-                    navigate('/');
+                    window.alert(`Your score is ${score}.`);
+                    navigate('/latest');
                 });
             } else {
-                navigate('/');
+                window.alert(`Your score is ${score}.`);
+                navigate('/latest');
             }
         }
     }, [timer, navigate, score]);
