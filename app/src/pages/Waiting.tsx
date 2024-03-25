@@ -36,7 +36,7 @@ export default function Waiting() {
                                 clearInterval(intervalRef.current);
                                 intervalRef.current = null;
                             }
-                            navigate('/game-room');
+                            navigate('/game');
                             return currentCount;
                         }
                         return currentCount - 1;
