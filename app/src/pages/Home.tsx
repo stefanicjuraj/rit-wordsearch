@@ -24,7 +24,7 @@ export default function Home() {
                 </div>
 
                 <div className="mb-12">
-                    <Link to="/waiting-room" className="px-7 py-4 text-sm font-medium text-white bg-green-500 border border-green-500 rounded-full focus:outline-none hover:bg-green-500 focus:ring-1 focus:ring-green-500 hover:text-black me-2">
+                    <Link to="/waiting" className="px-7 py-4 text-sm font-medium text-white bg-green-500 border border-green-500 rounded-full focus:outline-none hover:bg-green-500 focus:ring-1 focus:ring-green-500 hover:text-black me-2">
                         Enter Waiting Room
                     </Link>
                 </div>
