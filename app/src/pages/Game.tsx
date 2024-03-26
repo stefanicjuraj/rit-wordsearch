@@ -72,12 +72,12 @@ export default function Game() {
                         setDoc(scoreRef, updatedScores, { merge: true })
                             .then(() => {
                                 window.alert(`Your score is ${score}.`);
-                                navigate('/latest');
+                                navigate('/score');
                             })
                             .catch(error => {
                                 console.error("Error saving score: ", error);
                                 window.alert(`Your score is ${score}.`);
-                                navigate('/latest');
+                                navigate('/score');
                             });
                     } else {
                         const initialScores = {
@@ -92,22 +92,22 @@ export default function Game() {
                         setDoc(scoreRef, initialScores, { merge: true })
                             .then(() => {
                                 window.alert(`Your score is ${score}.`);
-                                navigate('/latest');
+                                navigate('/score');
                             })
                             .catch(error => {
                                 console.error("Error creating scores document: ", error);
                                 window.alert(`Your score is ${score}.`);
-                                navigate('/latest');
+                                navigate('/score');
                             });
                     }
                 }).catch(error => {
                     console.error("Error fetching scores document: ", error);
                     window.alert(`Your score is ${score}.`);
-                    navigate('/latest');
+                    navigate('/score');
                 });
             } else {
                 window.alert(`Your score is ${score}.`);
-                navigate('/latest');
+                navigate('/score');
             }
         }
     }, [timer, navigate, score]);
