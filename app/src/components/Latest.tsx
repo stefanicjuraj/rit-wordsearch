@@ -4,7 +4,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from "../services/firebase";
 // Types
 import { LatestScore } from '../types/latest';
-import { Link } from 'react-router-dom';
 
 export default function Latest() {
     const [latest, setLatest] = useState<LatestScore[]>([]);
@@ -65,16 +64,6 @@ export default function Latest() {
                         ))}
                     </tbody>
                 </table>
-            </div>
-            <div className="mt-12 text-center mb-12">
-                <Link to="/score" className="px-7 py-4 text-sm font-medium text-white bg-yellow-500 border border-yellow-500 rounded-full focus:outline-none hover:bg-yellow-500 focus:ring-1 focus:ring-yellow-500 hover:text-black me-2">
-                    Highest Scores
-                </Link>
-            </div>
-            <div className="mt-12 text-center mb-32">
-                <Link to="/" className="px-7 py-4 text-sm font-medium text-white bg-red-500 border border-red-500 rounded-full focus:outline-none hover:bg-red-500 focus:ring-1 focus:ring-red-500 hover:text-black me-2">
-                    Exit
-                </Link>
             </div>
         </>
     );
