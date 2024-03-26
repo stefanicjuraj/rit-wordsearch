@@ -133,7 +133,7 @@ export default function Game() {
                 {alert.show && (
                     <div className={`p-4 mt-4 max-w-sm mx-auto mb-4 text-sm rounded-lg ${alert.type === 'success' ? 'text-green-800 bg-green-50' : 'text-red-800 bg-red-50'}`} role="alert">
                         <span className="font-medium">
-                            {alert.type === 'success' ? 'Success!' : 'Error!'}
+                            {alert.type === 'success' ? '' : ''}
                         </span>
                         {alert.message}
                     </div>
