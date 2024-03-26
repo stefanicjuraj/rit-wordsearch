@@ -65,9 +65,6 @@ export default function Waiting() {
 
     return (
         <div className="mx-auto mt-32 text-white">
-            <h1 className="mb-8 text-xl text-center">
-                You entered the waiting room!
-            </h1>
             <h1 className="p-2 mb-2 text-xl text-center">
                 Players in the waiting room: {players.length}
             </h1>
