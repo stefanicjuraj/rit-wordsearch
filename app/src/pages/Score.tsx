@@ -5,6 +5,8 @@ import { db } from "../services/firebase";
 // Types
 import { UserScore } from '../types/score';
 import { Link } from 'react-router-dom';
+// Components
+import Latest from '../components/Latest';
 
 export default function Score() {
     const [scores, setScores] = useState<UserScore[]>([]);
@@ -38,7 +40,7 @@ export default function Score() {
 
         <>
             <div className="mx-auto mt-24 mb-16 text-center text-white max-w-screen-md">
-                <h1 className="mb-4 text-2xl font-bold text-center">Scoreboard</h1>
+                <h1 className="mb-4 text-2xl font-bold text-center">Highest Game Scores</h1>
             </div>
             <div className="relative overflow-x-auto max-w-screen-sm mx-auto rounded-xl">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -66,14 +68,10 @@ export default function Score() {
                     </tbody>
                 </table>
             </div>
-            <div className="mt-12 text-center mb-12">
-                <Link to="/latest" className="px-7 py-4 text-sm font-medium text-white bg-yellow-500 border border-yellow-500 rounded-full focus:outline-none hover:bg-yellow-500 focus:ring-1 focus:ring-yellow-500 hover:text-black me-2">
-                    View Latest Scores
-                </Link>
-            </div>
-            <div className="mt-12 text-center mb-32">
+            <Latest />
+            <div className="mt-24 text-center mb-32">
                 <Link to="/" className="px-7 py-4 text-sm font-medium text-white bg-red-500 border border-red-500 rounded-full focus:outline-none hover:bg-red-500 focus:ring-1 focus:ring-red-500 hover:text-black me-2">
-                    Exit Scoreboard
+                    Exit
                 </Link>
             </div>
         </>
