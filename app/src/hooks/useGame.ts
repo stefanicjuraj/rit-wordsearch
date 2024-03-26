@@ -111,7 +111,7 @@ export default function useGame(initialSvgIndex = 0) {
     } else {
       setAlert({
         show: true,
-        message: "Incorrect. Try again.",
+        message: "Incorrect - try again.",
         type: "error",
       });
     }
