@@ -24,7 +24,7 @@ export default function Chat() {
     };
 
     return (
-        <div className="mx-auto bg-[#333] text-center w-2/4 mt-8 mb-24 rounded-xl">
+        <div className="mx-auto bg-[#333] text-center w-2/4 mt-8 mb-16 rounded-xl">
             <div className="p-4 text-left" style={{ height: '500px', overflowY: 'scroll' }}>
                 <h1 className="my-2 text-lg text-center">Chat with other players</h1>
                 <hr className="my-4" />
