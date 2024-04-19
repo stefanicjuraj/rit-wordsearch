@@ -59,6 +59,19 @@ export const leaveWaiting = async (uid: string) => {
   }
 };
 
+export const updatePlayerReadyStatus = async (userId: string) => {
+  const waitingRoomRef = doc(db, "collection", "waiting");
+  const snapshot = await getDoc(waitingRoomRef);
+  if (snapshot.exists()) {
+    const users = snapshot
+      .data()
+      .users.map((user: { uid: string }) =>
+        user.uid === userId ? { ...user, ready: true } : user
+      );
+    await updateDoc(waitingRoomRef, { users });
+  }
+};
+
 const clearChatMessages = async () => {
   const messagesDocRef = doc(db, "collection", "messages");
   await setDoc(messagesDocRef, { messages: [] });
