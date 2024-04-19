@@ -3,4 +3,9 @@
 body {
   font-family: "Press Start 2P", system-ui;
   background: #111;
+  scroll-behavior: smooth;
+  /* disable user select */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
