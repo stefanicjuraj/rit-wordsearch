@@ -18,7 +18,7 @@ export default function Chat() {
                     console.error("No user is signed in or the user doesn't have an email");
                 }
             } catch (error) {
-                console.error("Error sending message: ", error);
+                console.error("Error sending message.");
             }
         }
     };

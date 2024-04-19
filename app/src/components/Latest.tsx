@@ -26,7 +26,7 @@ export default function Latest() {
                 scoresArray.sort((a, b) => b.score - a.score);
                 setLatest(scoresArray);
             } else {
-                console.log("No scores found!");
+                console.log("No scores found.");
             }
         };
 
