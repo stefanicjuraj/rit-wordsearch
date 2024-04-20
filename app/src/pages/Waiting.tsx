@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { DocumentData } from 'firebase/firestore';
 // Hooks
@@ -20,8 +20,8 @@ export default function Waiting() {
         const unsubscribe = getUsersinWaiting((newUsers) => {
             setPlayers(newUsers);
 
-            if ((newUsers as DocumentData[]).length === 2 && (newUsers as DocumentData[]).every(user => user.ready)) {
-                navigate('/game');
+            if (Array.isArray(newUsers) && newUsers.length === 2 && newUsers.every((user: DocumentData) => user.ready)) {
+                leaveAndNavigate();
             }
         });
 
@@ -32,6 +32,13 @@ export default function Waiting() {
             unsubscribe();
         };
     }, [navigate, currentUser]);
+
+    const leaveAndNavigate = useCallback(async () => {
+        if (currentUser) {
+            await leaveWaiting(currentUser.uid);
+            navigate('/game');
+        }
+    }, [currentUser, navigate]);
 
     const handlePlayerReady = () => {
         if (currentUser) {
