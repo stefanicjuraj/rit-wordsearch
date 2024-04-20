@@ -6,7 +6,7 @@ import { db } from "../services/firebase";
 import { UserScore } from '../types/score';
 import { Link } from 'react-router-dom';
 // Components
-import Latest from '../components/Latest';
+import Latest from '../components/LatestScore';
 
 export default function Score() {
     const [scores, setScores] = useState<UserScore[]>([]);
