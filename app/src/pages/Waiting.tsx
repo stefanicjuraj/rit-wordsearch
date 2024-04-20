@@ -31,6 +31,7 @@ export default function Waiting() {
             }
             unsubscribe();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigate, currentUser]);
 
     const leaveAndNavigate = useCallback(async () => {
