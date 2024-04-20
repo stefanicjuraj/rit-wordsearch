@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { DocumentData, doc, getDoc, setDoc } from 'firebase/firestore';
+import { DocumentData, doc, runTransaction } from 'firebase/firestore';
 // Hooks
 import useGameRoom, { getUsersInGame, joinGameWithTransaction, leaveGame } from "../hooks/useGame";
 import { auth } from '../hooks/auth';
@@ -67,30 +67,28 @@ export default function Game() {
 
     useEffect(() => {
         if (turnEnded) {
-            users.forEach(user => {
-                const scoreRef = doc(db, "collection", "scores");
+            users.forEach(async () => {
+                const gameRef = doc(db, "collection", "games"); // Reference the game document
 
-                getDoc(scoreRef).then((docSnap) => {
-                    const data = docSnap.data() || {};
-                    const userScores = data[user.uid] || {};
-                    const highestScore = Math.max(userScores.highestScore || 0, score);
+                try {
+                    await runTransaction(db, async (transaction) => {
+                        const gameSnapshot = await transaction.get(gameRef);
 
-                    const updatedScores = {
-                        ...data,
-                        [user.uid]: {
-                            displayName: user.displayName,
-                            email: user.email,
-                            score: score,
-                            highestScore: highestScore
+                        if (!gameSnapshot.exists()) {
+                            throw "Game document does not exist!"; // Handle non-existing doc
                         }
-                    };
 
-                    setDoc(scoreRef, updatedScores, { merge: true }).catch(error => {
-                        console.error("Error updating scores document: ", error);
+                        const currentUsers = gameSnapshot.data().users || [];
+                        const updatedUsers = currentUsers.map((user: { uid: string | undefined; score: unknown; }) => ({
+                            ...user, // Keep existing user data
+                            score: user.uid === auth.currentUser?.uid ? score : user.score, // Update score for current user only
+                        }));
+
+                        transaction.update(gameRef, { users: updatedUsers });
                     });
-                }).catch(error => {
-                    console.error("Error fetching scores document: ", error);
-                });
+                } catch (error) {
+                    console.error("Error updating score document:", error);
+                }
             });
             navigate('/score');
         }
