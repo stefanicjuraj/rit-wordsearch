@@ -52,18 +52,20 @@ export default function Waiting() {
                     </li>
                 ))}
             </ul>
-            <div className="text-center my-8">
-                <button
-                    className="px-7 py-4 text-sm font-medium text-white bg-green-500 border border-green-500 rounded-full focus:outline-none hover:bg-green-500 focus:ring-1 focus:ring-green-500 hover:text-black"
-                    onClick={handlePlayerReady}
-                >
-                    Ready
-                </button>
-            </div>
             {players.length === 2 && (
-                <p className="text-center mb-4">
-                    Waiting for both players to be ready...
-                </p>
+                <>
+                    <div className="text-center my-8">
+                        <button
+                            className="px-7 py-4 text-sm font-medium text-white bg-green-500 border border-green-500 rounded-full focus:outline-none hover:bg-green-500 focus:ring-1 focus:ring-green-500 hover:text-black"
+                            onClick={handlePlayerReady}
+                        >
+                            Ready
+                        </button>
+                    </div>
+                    <p className="text-center mb-4">
+                        Waiting for both players to be ready...
+                    </p>
+                </>
             )}
             <Chat />
             <div className="text-center mb-32">
