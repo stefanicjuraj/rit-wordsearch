@@ -1,44 +1,71 @@
 import { SetStateAction, useState } from "react";
 import {
   DocumentData,
-  arrayUnion,
   doc,
   getDoc,
   onSnapshot,
-  setDoc,
+  runTransaction,
   updateDoc,
 } from "firebase/firestore";
-import { User } from "firebase/auth";
 // Services
 import { db } from "../services/firebase";
 // Utils
 import { sanitizeString } from "../utils/sanitization";
 
-export const joinGame = async (user: User) => {
+// export const joinGame = async (user: User) => {
+//   const gameRoomRef = doc(db, "collection", "games");
+//   const snapshot = await getDoc(gameRoomRef);
+//   if (snapshot.exists()) {
+//     const users = snapshot.data().users || [];
+//     const userExists = users.some(
+//       (existingUser: { uid: unknown }) => existingUser.uid === user.uid
+//     );
+//     if (!userExists) {
+//       await updateDoc(gameRoomRef, {
+//         users: arrayUnion({
+//           uid: user.uid,
+//           email: user.email,
+//         }),
+//       });
+//     }
+//   } else {
+//     await setDoc(gameRoomRef, {
+//       users: [
+//         {
+//           uid: user.uid,
+//           email: user.email,
+//         },
+//       ],
+//     });
+//   }
+// };
+
+export const joinGameWithTransaction = async (user: {
+  uid: unknown;
+  email: unknown;
+}) => {
   const gameRoomRef = doc(db, "collection", "games");
-  const snapshot = await getDoc(gameRoomRef);
-  if (snapshot.exists()) {
-    const users = snapshot.data().users || [];
-    const userExists = users.some(
-      (existingUser: { uid: unknown }) => existingUser.uid === user.uid
-    );
-    if (!userExists) {
-      await updateDoc(gameRoomRef, {
-        users: arrayUnion({
-          uid: user.uid,
-          email: user.email,
-        }),
-      });
-    }
-  } else {
-    await setDoc(gameRoomRef, {
-      users: [
-        {
-          uid: user.uid,
-          email: user.email,
-        },
-      ],
+
+  try {
+    await runTransaction(db, async (transaction) => {
+      const gameRoomSnapshot = await transaction.get(gameRoomRef);
+      if (!gameRoomSnapshot.exists()) {
+        throw "Document does not exist!";
+      }
+
+      const users = gameRoomSnapshot.data().users || [];
+      const userIndex = users.findIndex(
+        (u: { uid: unknown }) => u.uid === user.uid
+      );
+
+      if (userIndex === -1) {
+        users.push({ uid: user.uid, email: user.email });
+      }
+
+      transaction.update(gameRoomRef, { users: users });
     });
+  } catch (e) {
+    console.log("Transaction failed: ", e);
   }
 };
 
