@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { DocumentData, doc, getDoc, setDoc } from 'firebase/firestore';
 // Hooks
-import useGameRoom, { getUsersInGame, joinGame, leaveGame } from "../hooks/useGame";
+import useGameRoom, { getUsersInGame, joinGameWithTransaction, leaveGame } from "../hooks/useGame";
 import { auth } from '../hooks/auth';
 import { db } from "../services/firebase";
 
@@ -25,7 +25,7 @@ export default function Game() {
     useEffect(() => {
         const currentUser = auth.currentUser;
         if (currentUser) {
-            joinGame(currentUser);
+            joinGameWithTransaction(currentUser);
         }
 
         const unsubscribe = getUsersInGame((newUsers) => {
@@ -53,12 +53,10 @@ export default function Game() {
 
     useEffect(() => {
         if (timer === 0 && users.length > 1) {
-            // Turn ends for the current player, move to the next or reset
             const nextPlayerIndex = activePlayerIndex < users.length - 1 ? activePlayerIndex + 1 : 0;
 
-            // Check if all players have had their turn
             if (nextPlayerIndex === 0) {
-                setTurnEnded(true); // This can be used to signify the end of a round instead of a game
+                setTurnEnded(true);
             } else {
                 setActivePlayerIndex(nextPlayerIndex);
                 setTimer(10);
@@ -93,7 +91,6 @@ export default function Game() {
                     console.error("Error fetching scores document: ", error);
                 });
             });
-            // Redirect after all updates are attempted
             navigate('/score');
         }
     }, [turnEnded, users, navigate, score]);
