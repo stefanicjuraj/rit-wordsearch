@@ -49,6 +49,7 @@ export default function Game() {
             unsubscribe();
             clearInterval(countdown);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [turnEnded]);
 
     useEffect(() => {
