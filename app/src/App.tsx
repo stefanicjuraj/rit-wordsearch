@@ -45,6 +45,6 @@ export default function App() {
           <Login />
         )}
       </>
-    </Router >
+    </Router>
   );
 }
