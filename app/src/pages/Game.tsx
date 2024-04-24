@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { DocumentData, doc, runTransaction } from 'firebase/firestore';
+import { Link } from "react-router-dom";
+import { DocumentData, addDoc, collection, doc, runTransaction } from 'firebase/firestore';
+// Services
+import { db } from "../services/firebase";
+// Types
+import { User } from "../types/user";
 // Hooks
 import useGameRoom, { getUsersInGame, joinGameWithTransaction, leaveGame } from "../hooks/useGame";
 import { auth } from '../hooks/auth';
-import { db } from "../services/firebase";
+// Components
+import GameOver from "../components/GameOver";
+import ScoreBoard from "../components/ScoreBoard";
 
 export default function Game() {
     const [users, setUsers] = useState<DocumentData[]>([]);
     const [timer, setTimer] = useState(10);
     const [activePlayerIndex, setActivePlayerIndex] = useState(0);
     const [turnEnded, setTurnEnded] = useState(false);
-    const navigate = useNavigate();
+    const [gameOver, setGameOver] = useState(false);
     const {
         currentSvgIndex,
         inputValue,
@@ -67,32 +73,52 @@ export default function Game() {
 
     useEffect(() => {
         if (turnEnded) {
-            users.forEach(async () => {
-                const gameRef = doc(db, "collection", "games"); // Reference the game document
+            setGameOver(true);
+            const gameRef = doc(db, "collection", "games");
+            runTransaction(db, async (transaction) => {
+                const gameDoc = await transaction.get(gameRef);
+                if (!gameDoc.exists()) {
+                    throw new Error("Error getting game database.");
+                }
+                const gameData = gameDoc.data();
+                const updatedUsers = (gameData.users || []).map((user: { uid: string | undefined; score: unknown; }) => ({
+                    ...user,
+                    score: user.uid === auth.currentUser?.uid ? score : user.score
+                }));
+                transaction.update(gameRef, { users: updatedUsers });
+            }).catch(() => console.error("Error updating the database."));
+        }
+    }, [turnEnded, users, score]);
 
-                try {
-                    await runTransaction(db, async (transaction) => {
-                        const gameSnapshot = await transaction.get(gameRef);
-
-                        if (!gameSnapshot.exists()) {
-                            throw "Game document does not exist!"; // Handle non-existing doc
-                        }
-
-                        const currentUsers = gameSnapshot.data().users || [];
-                        const updatedUsers = currentUsers.map((user: { uid: string | undefined; score: unknown; }) => ({
-                            ...user, // Keep existing user data
-                            score: user.uid === auth.currentUser?.uid ? score : user.score, // Update score for current user only
-                        }));
-
-                        transaction.update(gameRef, { users: updatedUsers });
+    useEffect(() => {
+        if (gameOver) {
+            users.forEach(user => {
+                if (user.score !== undefined) {
+                    const scoresRef = collection(db, "scores");
+                    addDoc(scoresRef, {
+                        uid: user.uid,
+                        score: user.score,
+                    }).catch(() => {
+                        console.error("Error writing score to database.");
                     });
-                } catch (error) {
-                    console.error("Error updating score document:", error);
                 }
             });
-            navigate('/score');
         }
-    }, [turnEnded, users, navigate, score]);
+    }, [gameOver, users]);
+
+    if (gameOver) {
+        return (
+            <>
+                <GameOver />
+                <ScoreBoard users={users as User[]} />
+                <div className="text-center mt-32 mb-32">
+                    <Link to="/" className="px-7 py-4 mt-32 text-sm font-medium text-white bg-red-500 border border-red-500 rounded-full focus:outline-none hover:bg-red-500 focus:ring-1 focus:ring-red-500 hover:text-black">
+                        Exit
+                    </Link>
+                </div>
+            </>
+        );
+    }
 
 
     return (
@@ -129,11 +155,6 @@ export default function Game() {
                         </p>
                     </div>
                 )}
-            </div>
-            <div className="mt-12 text-center mb-32">
-                <Link to="/" className="px-7 py-4 text-sm font-medium text-white bg-red-500 rounded-full focus:outline-none hover:bg-red-500 focus:ring-1 focus:ring-red-500 hover:text-black me-2">
-                    Exit Game
-                </Link>
             </div>
         </div>
     );
